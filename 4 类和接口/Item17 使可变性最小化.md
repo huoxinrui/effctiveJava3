@@ -1,26 +1,51 @@
 ### Item17 使可变性最小化
 
-> An immutable class is simply a class whose instances cannot be modified. All of the information contained in each instance is fixed for the lifetime of the object, so no changes can ever be observed. The Java platform libraries contain many immutable classes, including String, the boxed primitive classes, and BigInteger and BigDecimal. There are many good reasons for this: Immutable classes are easier to design, implement, and use than mutable classes. They are less prone to error and are more secure.
+> An immutable class is simply a class whose instances cannot be modified. 
+> All of the information contained in each instance is fixed for the lifetime of the object, so no changes can ever be observed. 
+> The Java platform libraries contain many immutable classes, including String, the boxed primitive classes, and BigInteger and BigDecimal. 
+> There are many good reasons for this: Immutable classes are easier to design, implement, and use than mutable classes. 
+> They are less prone to error and are more secure.
 
-不可变类就是其实例不可以修改的类。在每个实例中的所有的信息在这个对象的生命周期里都是固定的，不会有任何的改变。Java平台类库包含了很多的不可变类，包括String、基本类型封装类、BigInteger、BigDecimal。不可变类之所以存在有以下几个理由：不可变类相对于可变类更容易设计、实现、使用；也更加不容易出错、比较安全。
+不可变类就是其实例不可以修改的类。
+在每个实例中的所有的信息在这个对象的生命周期里都是固定的，不会有任何的改变。
+Java平台类库包含了很多的不可变类，包括String、基本类型封装类、BigInteger、BigDecimal。
+不可变类之所以存在有以下几个理由：不可变类相对于可变类更容易设计、实现、使用。
+也更加不容易出错、比较安全。
 
 > To make a class immutable, follow these five rules:
 >
 > 1. **Don’t provide methods that modify the object’s state** (known as *mutators*).
-> 2. **Ensure that the class can’t be extended.** This prevents careless or malicious subclasses from compromising the immutable behavior of the class by behaving as if the object’s state has changed. Preventing subclassing is generally accomplished by making the class final, but there is an alternative that we’ll discuss later.
-> 3. **Make all fields final.** This clearly expresses your intent in a manner that is enforced by the system. Also, it is necessary to ensure correct behavior if a reference to a newly created instance is passed from one thread to another without synchronization, as spelled out in the *memory model* [JLS, 17.5; Goetz06, 16].
-> 4. **Make all fields private.** This prevents clients from obtaining access to mutable objects referred to by fields and modifying these objects directly. While it is technically permissible for immutable classes to have public final fields containing primitive values or references to immutable objects, it is not recommended because it precludes changing the internal representation in a later release (Items 15 and 16).
-> 5. **Ensure exclusive access to any mutable components.** If your class has any fields that refer to mutable objects, ensure that clients of the class cannot obtain references to these objects. Never initialize such a field to a client-provided object reference or return the field from an accessor. Make *defensive copies* (Item 50) in constructors, accessors, and readObject methods (Item 88).
+> 2. **Ensure that the class can’t be extended.** 
+> This prevents careless or malicious subclasses from compromising the immutable behavior of the class by behaving as if the object’s state has changed.
+> Preventing subclassing is generally accomplished by making the class final, but there is an alternative that we’ll discuss later.
+> 3. **Make all fields final.** 
+> This clearly expresses your intent in a manner that is enforced by the system.
+> Also, it is necessary to ensure correct behavior if a reference to a newly created instance is passed from one thread to another without synchronization, as spelled out in the *memory model* [JLS, 17.5; Goetz06, 16].
+> 4. **Make all fields private.** 
+> This prevents clients from obtaining access to mutable objects referred to by fields and modifying these objects directly.
+> While it is technically permissible for immutable classes to have public final fields containing primitive values or references to immutable objects, it is not recommended because it precludes changing the internal representation in a later release (Items 15 and 16).
+> 5. **Ensure exclusive access to any mutable components.** 
+> If your class has any fields that refer to mutable objects, ensure that clients of the class cannot obtain references to these objects. 
+> Never initialize such a field to a client-provided object reference or return the field from an accessor. 
+> Make *defensive copies* (Item 50) in constructors, accessors, and readObject methods (Item 88).
 
 要使一个类不可变，需要遵循以下规则：
 
 1. **不要提供可以修改这个对象的状态的方法**（也称为设值方法）。
-2. **保证这个类不可以被继承**。这可以防止一些不小心或者恶意的子类通过假装对象的状态已经被修改来破坏类的不可变性。为防止子类继承，一般来说，可以通过将类设为final来实现。还有一种可选择的方式后面会讨论。
-3. **把所有的域设为final**。这可以通过系统强制的方法清除的表达你的意图。并且，这对于在没有同步机制的时候，把一个新创建的实例引用从一个线程传递到另一个线程时，保证正确的行为来说，有很必要。正如[JLS, 17.5; Goetz06, 16]的内存模型所描述的那样。
-4. **把所有域都设为private**。这可以防止客户端获得可变对象的域的引用从而直接修改对象。虽然不可变对象还是可以有包含基本数据类型或者不可变对象引用的公有final域，但是还是不推荐这么做，因为在后面的保本中，就不可以改变内部的表示方法了（Item15和Item16）。
-5. **确保可变组件的互斥访问**。如果类有一些域引用了可变对象，要确保这个类的客户端无法获得这些对象的引用。永远不要使用客户端提供的对象引用来初始化这种域，也不要通过访问器返回这些域的引用。在构造器、访问方法和readObject方法（Item88)里使用保护性拷贝（Item50）。
+2. **保证这个类不可以被继承**。
+这可以防止一些不小心或者恶意的子类通过假装对象的状态已经被修改来破坏类的不可变性。
+为防止子类继承，一般来说，可以通过将类设为final来实现。还有一种可选择的方式后面会讨论。
+3. **把所有的域设为final**。
+这可以通过系统强制的方法清除的表达你的意图。
+并且，这对于在没有同步机制的时候，把一个新创建的实例引用从一个线程传递到另一个线程时，保证正确的行为来说，有很必要。正如[JLS, 17.5; Goetz06, 16]的内存模型所描述的那样。
+4. **把所有域都设为private**。
+这可以防止客户端获得可变对象的域的引用从而直接修改对象。
+虽然不可变对象还是可以有包含基本数据类型或者不可变对象引用的公有final域，但是还是不推荐这么做，因为在后面的版本中，就不可以改变内部的表示方法了（Item15和Item16）。
+5. **确保可变组件的互斥访问**。如果类有一些域引用了可变对象，要确保这个类的客户端无法获得这些对象的引用。
+永远不要使用客户端提供的对象引用来初始化这种域，也不要通过访问器返回这些域的引用。在构造器、访问方法和readObject方法（Item88)里使用保护性拷贝（Item50）。
 
-> Many of the example classes in previous items are immutable. One such class is PhoneNumber in Item 11, which has accessors for each attribute but no corre- sponding mutators. Here is a slightly more complex example:
+> Many of the example classes in previous items are immutable. 
+> One such class is PhoneNumber in Item 11, which has accessors for each attribute but no corre- sponding mutators. Here is a slightly more complex example:
 
 在前面提供的示例类中，有很多都是不可变的，比如在Item11里的PhoneNumber，有访问每一域的方法，却没有对应的设值方法。下面是一个稍微复杂一点的例子：
 
@@ -68,17 +93,49 @@ public final class Complex {
 }
 ```
 
-> This class represents a *complex number* (a number with both real and imaginary parts). In addition to the standard Object methods, it provides accessors for the real and imaginary parts and provides the four basic arithmetic operations: addition, subtraction, multiplication, and division. Notice how the arithmetic operations create and return a new Complex instance rather than modifying this instance. This pattern is known as the *functional* approach because methods return the result of applying a function to their operand, without modifying it. Contrast it to the *procedural* or *imperative* approach in which methods apply a procedure to their operand, causing its state to change. Note that the method names are prepositions (such as plus) rather than verbs (such as add). This emphasizes the fact that methods don’t change the values of the objects. The BigInteger and BigDecimal classes did *not* obey this naming convention, and it led to many usage errors.
+> This class represents a *complex number* (a number with both real and imaginary parts). 
+> In addition to the standard Object methods, it provides accessors for the real and imaginary parts and provides the four basic arithmetic operations: addition, subtraction, multiplication, and division. 
+> Notice how the arithmetic operations create and return a new Complex instance rather than modifying this instance. 
+> This pattern is known as the *functional* approach because methods return the result of applying a function to their operand, without modifying it.
+> Contrast it to the *procedural* or *imperative* approach in which methods apply a procedure to their operand, causing its state to change. 
+> Note that the method names are prepositions (such as plus) rather than verbs (such as add).
+> This emphasizes the fact that methods don’t change the values of the objects. 
+> The BigInteger and BigDecimal classes did *not* obey this naming convention, and it led to many usage errors.
 
-这个类表示一个复数（一个包含实部和虚部的数）。除了标准的Object方法以外，还提供了对实部和虚部的访问方法，以及四个基本的算数操作：加、减、乘、除。需要注意的是，这些算数操作是创建并返回一个新的Complex实例的，而不是修改原有实例。它被称为函数（functional）方法，这种方法在不修改操作数的条件下，返回一个对操作数应用了某个函数的结果。与之对应的是函数（procedural）和过程（imperative）方法，这两种方法在操作数上执行函数的时候，会改变其状态。需要注意的是，这些方法的名字都是介词（比如plus）而不是动词（比如add）。这进一步表明了这个方法不会修改对象的值。BigInteger和BigDecimal类并没有遵循这样的命名约定，因此导致了很多用法有问题。
+这个类表示一个复数（一个包含实部和虚部的数）。除了标准的Object方法以外，还提供了对实部和虚部的访问方法，以及四个基本的算数操作：加、减、乘、除。
+需要注意的是，这些算数操作是创建并返回一个新的Complex实例的，而不是修改原有实例。它被称为函数（functional）方法，这种方法在不修改操作数的条件下，返回一个对操作数应用了某个函数的结果。
+与之对应的是函数（procedural）和过程（imperative）方法，这两种方法在操作数上执行函数的时候，会改变其状态。
+需要注意的是，这些方法的名字都是介词（比如plus）而不是动词（比如add）。
+这进一步表明了这个方法不会修改对象的值。
+BigInteger和BigDecimal类并没有遵循这样的命名约定，因此导致了很多用法有问题。
 
-> The functional approach may appear unnatural if you’re not familiar with it, but it enables immutability, which has many advantages. **Immutable objects are simple.** An immutable object can be in exactly one state, the state in which it was created. If you make sure that all constructors establish class invariants, then it is guaranteed that these invariants will remain true for all time, with no further effort on your part or on the part of the programmer who uses the class. Mutable objects, on the other hand, can have arbitrarily complex state spaces. If the documentation does not provide a precise description of the state transitions performed by mutator methods, it can be difficult or impossible to use a mutable class reliably.
+> The functional approach may appear unnatural if you’re not familiar with it, but it enables immutability, which has many advantages. 
+> **Immutable objects are simple.** 
+> An immutable object can be in exactly one state, the state in which it was created. 
+> If you make sure that all constructors establish class invariants, then it is guaranteed that these invariants will remain true for all time, with no further effort on your part or on the part of the programmer who uses the class. 
+> Mutable objects, on the other hand, can have arbitrarily complex state spaces.
+> If the documentation does not provide a precise description of the state transitions performed by mutator methods, it can be difficult or impossible to use a mutable class reliably.
 
-如果你不熟悉这些函数方法的话，可能看起来会有点不自然，但这些方法带来了有很多优点的不可变性。**不可变的对象很简单**。一个不可变的对象始终处在一个确定的状态里，也就是创建时的状态。如果你保证了所有的构造器都建立了类的约束关系，那么就可以保证这些约束关系会一直存在，不需要你或者使用这个类的程序员在做其他的努力。另一方面，不可变对象可以有任意多的状态空间，如果其文档没有对设值方法带来的状态转换提供一个准确的描述，要可靠的使用一个可变对象就会很困难，甚至不可能。
+如果你不熟悉这些函数方法的话，可能看起来会有点不自然，但这些方法带来了有很多优点的不可变性。
+**不可变的对象很简单**。
+一个不可变的对象始终处在一个确定的状态里，也就是创建时的状态。
+如果你保证了所有的构造器都建立了类的约束关系，那么就可以保证这些约束关系会一直存在，不需要你或者使用这个类的程序员在做其他的努力。
+另一方面，可变对象可以有任意多的状态空间，如果其文档没有对设值方法带来的状态转换提供一个准确的描述，要可靠的使用一个可变对象就会很困难，甚至不可能。
 
-> **Immutable objects are inherently thread-safe; they require no synchronization.** They cannot be corrupted by multiple threads accessing them concurrently. This is far and away the easiest approach to achieve thread safety. Since no thread can ever observe any effect of another thread on an immutable object, **immutable objects can be shared freely.** Immutable classes should therefore encourage clients to reuse existing instances wherever possible. One easy way to do this is to provide public static final constants for commonly used values. For example, the Complex class might provide these constants:
+> **Immutable objects are inherently thread-safe; they require no synchronization.** 
+> They cannot be corrupted by multiple threads accessing them concurrently.
+> This is far and away the easiest approach to achieve thread safety. 
+> Since no thread can ever observe any effect of another thread on an immutable object, **immutable objects can be shared freely.** 
+> Immutable classes should therefore encourage clients to reuse existing instances wherever possible. 
+> One easy way to do this is to provide public static final constants for commonly used values. 
+> For example, the Complex class might provide these constants:
 
-**不可变对象本质上是线程安全的，不需要任何同步操作**。在多个线程并发访问的时候，也不会被破坏。毫无疑问这是实现线程安全的最简单的方法。由于没有一个线程可以察觉到其他线程对不可变对象的影响，**那么不可变对象就可以自由地共享**。因此不可变类应该鼓励其客户端尽可能的重用已经存在的对象。一个很简单的方法对于常用的值，提供公有静态final常量。如下，Complex类可能提供如下几个实例：
+**不可变对象本质上是线程安全的，不需要任何同步操作**。
+在多个线程并发访问的时候，也不会被破坏。
+毫无疑问这是实现线程安全的最简单的方法。
+由于没有一个线程可以察觉到其他线程对不可变对象的影响，**那么不可变对象就可以自由地共享**。
+因此不可变类应该鼓励其客户端尽可能的重用已经存在的对象。
+一个很简单的应用：对于常用的值，提供公有静态final常量。如下，Complex类可能提供如下几个实例：
 
 ```java
 public static final Complex ZERO = new Complex(0, 0);
@@ -86,38 +143,74 @@ public static final Complex ONE  = new Complex(1, 0);
 public static final Complex I    = new Complex(0, 1);
 ```
 
-> This approach can be taken one step further. An immutable class can provide static factories (Item 1) that cache frequently requested instances to avoid creating new instances when existing ones would do. All the boxed primitive classes and BigInteger do this. Using such static factories causes clients to share instances instead of creating new ones, reducing memory footprint and garbage collection costs. Opting for static factories in place of public constructors when designing a new class gives you the flexibility to add caching later, without modifying clients.
+> This approach can be taken one step further. 
+> An immutable class can provide static factories (Item 1) that cache frequently requested instances to avoid creating new instances when existing ones would do.
+> All the boxed primitive classes and BigInteger do this. 
+> Using such static factories causes clients to share instances instead of creating new ones, reducing memory footprint and garbage collection costs. 
+> Opting for static factories in place of public constructors when designing a new class gives you the flexibility to add caching later, without modifying clients.
 
-这种方法可以进一步扩展，一个不可变类可以提供一个静态工厂方法（Item1）,用于缓存常用的实例，当已经存在这个实例的时候，可以避免创建一个新的实例。所有的基本类型的封装类和BigInteger都是这么做的。使用静态工厂方法可以让客户端共用实例，而不是创建一个新的，可以减少内存的使用以及降低垃圾回收的成本。在创建一个新的类的时候就用静态工厂方法来代替公有构造器还有一个好处：在后面要添加缓存的时候，可以不用影响到客户端。
+这种方法可以进一步扩展。
+一个不可变类可以提供一个静态工厂方法（Item1）,用于缓存常用的实例，当已经存在这个实例的时候，可以避免创建一个新的实例。
+所有的基本类型的封装类和BigInteger都是这么做的。
+使用静态工厂方法可以让客户端共用实例，而不是创建一个新的，可以减少内存的使用以及降低垃圾回收的成本。
+在创建一个新的类的时候就用静态工厂方法来代替公有构造器还有一个好处：在后面要添加缓存的时候，可以不用影响到客户端。
 
-> A consequence of the fact that immutable objects can be shared freely is that you never have to make *defensive copies* of them (Item 50). In fact, you never have to make any copies at all because the copies would be forever equivalent to the originals. Therefore, you need not and should not provide a clone method or *copy constructor* (Item 13) on an immutable class. This was not well understood in the early days of the Java platform, so the String class does have a copy constructor, but it should rarely, if ever, be used (Item 6).
+> A consequence of the fact that immutable objects can be shared freely is that you never have to make *defensive copies* of them (Item 50). 
+> In fact, you never have to make any copies at all because the copies would be forever equivalent to the originals. 
+> Therefore, you need not and should not provide a clone method or *copy constructor* (Item 13) on an immutable class. 
+> This was not well understood in the early days of the Java platform, so the String class does have a copy constructor, but it should rarely, if ever, be used (Item 6).
 
-“不可变对象可以自由共享”带来的一个事实是，就不在需要使用保护性拷贝了（Item50）。事实上，你不需要做任何的复制，因为这些复制品和原始对象一致都是一样的。因此，你不需要也不应该为不可变对象提供一个复制构造器或者clone方法。在早期的Java平台中，并没有很好的理解这一点，因此String类还是有一个复制构造器，但是应该尽量少用它（Item6）。
+“不可变对象可以自由共享”带来的一个事实是，就不在需要使用保护性拷贝了（Item50）。
+事实上，你不需要做任何的复制，因为这些复制品和原始对象一致都是一样的。
+因此，你不需要也不应该为不可变对象提供一个复制构造器或者clone方法。
+在早期的Java平台中，并没有很好的理解这一点，因此String类还是有一个复制构造器，但是应该尽量少用它（Item6）。
 
-> **Not only can you share immutable objects, but they can share their internals.** For example, the BigInteger class uses a sign-magnitude representation internally. The sign is represented by an int, and the magnitude is represented by an int array. The negate method produces a new BigInteger of like magnitude and opposite sign. It does not need to copy the array even though it is mutable; the newly created BigInteger points to the same internal array as the original.
+> **Not only can you share immutable objects, but they can share their internals.** 
+> For example, the BigInteger class uses a sign-magnitude representation internally. 
+> The sign is represented by an int, and the magnitude is represented by an int array. 
+> The negate method produces a new BigInteger of like magnitude and opposite sign.
+> It does not need to copy the array even though it is mutable; 
+> the newly created BigInteger points to the same internal array as the original.
 
-不仅仅可以共享不可变对象，也可以共享其内部状态。比如，BigInteger类内部使用了符号-数值的表示方法。符号用一个int来表示，数值用一个int数组来表示。negate（相反数）的方法创建了一个拥有相同的数值和相反的符号的新的BigInteger对象。在这里，即使数组是可变的，也不需要复制这个数组，在新的BigInteger对象和原始对象中指向同一个数组。
+不仅仅可以共享不可变对象，也可以共享其内部状态。
+比如，BigInteger类内部使用了符号-数值的表示方法。
+符号用一个int来表示，数值用一个int数组来表示。
+negate（相反数）方法创建了一个拥有相同的数值和相反的符号的新的BigInteger对象。
+在这里，即使数组是可变的，也不需要复制这个数组，在新的BigInteger对象和原始对象中指向同一个数组。
 
-> **Immutable objects make great building blocks for other objects,** whether mutable or immutable. It’s much easier to maintain the invariants of a complex object if you know that its component objects will not change underneath it. A special case of this principle is that immutable objects make great map keys and set elements: you don’t have to worry about their values changing once they’re in the map or set, which would destroy the map or set’s invariants.
+> **Immutable objects make great building blocks for other objects,** whether mutable or immutable.
+> It’s much easier to maintain the invariants of a complex object if you know that its component objects will not change underneath it.
+> A special case of this principle is that immutable objects make great map keys and set elements: you don’t have to worry about their values changing once they’re in the map or set, which would destroy the map or set’s invariants.
 >
 > **Immutable objects provide failure atomicity for free** (Item 76). Their state never changes, so there is no possibility of a temporary inconsistency.
 
-**不可变对象为其他的对象（不论是可变对象还是不可变对象）提供了大量的组件**。如果你知道复杂对象内部的组件对象不会发生变化的话，要维护其约束就要容易得多。这种原则的一个特殊的例子就是使用不可变对象作为map的key和set中的元素：你不用担心这些在map和set中的值会发生变化，而导致破坏了map和set的约束。
+**不可变对象为其他的对象（不论是可变对象还是不可变对象）提供了大量的组件**。
+如果你知道复杂对象内部的组件对象不会发生变化的话，要维护其约束就要容易得多。
+这种原则的一个特殊的例子就是使用不可变对象作为map的key和set中的元素：你不用担心这些在map和set中的值会发生变化，而导致破坏了map和set的约束。
 
 **不可变对象也无偿地提供了失败的原子性**。他们的状态永远都不会变化，因此不可能出现临时不一致的情况。
 
-> **The major disadvantage of immutable classes is that they require a separate object for each distinct value.** Creating these objects can be costly, especially if they are large. For example, suppose that you have a million-bit BigInteger and you want to change its low-order bit:
+> **The major disadvantage of immutable classes is that they require a separate object for each distinct value.** 
+> Creating these objects can be costly, especially if they are large.
+> For example, suppose that you have a million-bit BigInteger and you want to change its low-order bit:
 
-不可变对象的主要的缺点是，对于每个不同的值，需要一个单独的对象。创建这些对象需要付出代价，尤其是这些对象很大的时候。比如，假定你有一个位数上百万的BigInteger，然后，你想改变其低位的值。
+不可变对象的主要的缺点是，对于每个不同的值，需要一个单独的对象。
+创建这些对象需要付出代价，尤其是这些对象很大的时候。
+比如，假定你有一个位数上百万的BigInteger，然后，你想改变其低位的值。
 
 ```java
 BigInteger moby = ...;
 moby = moby.flipBit(0);
 ```
 
-> The flipBit method creates a new BigInteger instance, also a million bits long, that differs from the original in only one bit. The operation requires time and space proportional to the size of the BigInteger. Contrast this to java.util.BitSet. Like BigInteger, BitSet represents an arbitrarily long sequence of bits, but unlike BigInteger, BitSet is mutable. The BitSet class provides a method that allows you to change the state of a single bit of a million- bit instance in constant time:
+> The flipBit method creates a new BigInteger instance, also a million bits long, that differs from the original in only one bit.
+> The operation requires time and space proportional to the size of the BigInteger. 
+> Contrast this to java.util.BitSet. Like BigInteger, BitSet represents an arbitrarily long sequence of bits, but unlike BigInteger, BitSet is mutable.
+> The BitSet class provides a method that allows you to change the state of a single bit of a million- bit instance in constant time:
 
-flipBit方法创建了一个新的BigInteger实例，也有上百万的位数，但和原始的对象，只有一位不同。这个操作需要的时间和空间和BIgInteger的大小成正比。与之对应的是 java.util.BitSet，和BigInteger类似，BigSet也可以表示任意位数长的序列，但是和BigInteger不同的是，BigSet是可变的。BigSet类提供了一个可以在常数时间内修改上百万位数的实例的其中一位，如下：
+flipBit方法创建了一个新的BigInteger实例，也有上百万的位数，但和原始的对象，只有一位不同。
+这个操作需要的时间和空间和BIgInteger的大小成正比。
+与之对应的是 java.util.BitSet，和BigInteger类似，BigSet也可以表示任意位数长的序列，但是和BigInteger不同的是，BigSet是可变的。BigSet类提供了一个可以在常数时间内修改上百万位数的实例的其中一位，如下：
 
 ```java
 BitSet moby = ...;
@@ -126,7 +219,8 @@ moby.flip(0);
 
 > The performance problem is magnified if you perform a multistep operation that generates a new object at every step, eventually discarding all objects except the final result. There are two approaches to coping with this problem. The first is to guess which multistep operations will be commonly required and to provide them as primitives. If a multistep operation is provided as a primitive, the immutable class does not have to create a separate object at each step. Internally, the immutable class can be arbitrarily clever. For example, BigInteger has a package-private mutable “companion class” that it uses to speed up multistep operations such as modular exponentiation. It is much harder to use the mutable companion class than to use BigInteger, for all of the reasons outlined earlier. Luckily, you don’t have to use it: the implementors of BigInteger did the hard work for you.
 
-当执行每步都会生成一个新对象的多步操作，且除了最后的结果，其他的对象都会被抛弃时，这个性能问题就更加明显了。这里有两种方法可以觉得这个问题，第一个方法是，先猜测通常情况下需要哪些多步操作，然后将这些多步方法作为基本方法提供。如果一个多步操作已经有了对应的基本方法，这个不可变类就不用每一步都创建一个单独的对象了。在其内部，不可变对象可以很灵活。比如，BigInteger有一个包级私有的可变“配套类（companion class），专门用来对例如模指数（modular exponentiation）这样的多步操作进行加速。由于一些前面提到的原因，直接使用其可变的配套类相对于BigInteger，要困难得多。幸运的是，你也不需要直接使用它，BigInteger已经替你做了这复杂的实现工作。
+当执行每步都会生成一个新对象的多步操作，且除了最后的结果，其他的对象都会被抛弃时，这个性能问题就更加明显了。
+这里有两种方法可以觉得这个问题，第一个方法是，先猜测通常情况下需要哪些多步操作，然后将这些多步方法作为基本方法提供。如果一个多步操作已经有了对应的基本方法，这个不可变类就不用每一步都创建一个单独的对象了。在其内部，不可变对象可以很灵活。比如，BigInteger有一个包级私有的可变“配套类（companion class），专门用来对例如模指数（modular exponentiation）这样的多步操作进行加速。由于一些前面提到的原因，直接使用其可变的配套类相对于BigInteger，要困难得多。幸运的是，你也不需要直接使用它，BigInteger已经替你做了这复杂的实现工作。
 
 > The package-private mutable companion class approach works fine if you can accurately predict which complex operations clients will want to perform on your immutable class. If not, then your best bet is to provide a *public* mutable companion class. The main example of this approach in the Java platform libraries is the String class, whose mutable companion is StringBuilder (and its obsolete predecessor, StringBuffer).
 
