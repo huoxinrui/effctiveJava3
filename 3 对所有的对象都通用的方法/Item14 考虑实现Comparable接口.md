@@ -168,7 +168,7 @@ compareTo和compare方法有时候也会依赖两个数据的区别，如果第�
 
 > Do not use this technique. It is fraught with danger from integer overflow and IEEE 754 floating point arithmetic artifacts [JLS 15.20.1, 15.21.1]. Furthermore, the resulting methods are unlikely to be significantly faster than those written using the techniques described in this item. Use either a static compare method:
 
-不要使用上面这种方法，因为它可能会导整数溢出，而且违反了 IEEE 754浮点算数标准。此外，这个方法也不一定比使用介绍前面的方法块。使用静态比较方法如下：
+不要使用上面这种方法，因为它可能会导整数溢出，而且违反了 IEEE 754浮点算数标准。此外，这个方法也不一定比使用介绍前面的方法快。使用静态比较方法如下：
 
 ```java
 // Comparator based on static compare method
@@ -191,4 +191,4 @@ compareTo和compare方法有时候也会依赖两个数据的区别，如果第�
 
 > In summary, whenever you implement a value class that has a sensible ordering, you should have the class implement the Comparable interface so that its instances can be easily sorted, searched, and used in comparison-based collections. When comparing field values in the implementations of the compareTo methods, avoid the use of the < and > operators. Instead, use the static compare methods in the boxed primitive classes or the comparator construction methods in the Comparator interface.
 
-总结一下，当你要实现一个有明确顺序的值类的时候，都应该让这个类实现Comparable接口，如此以来，这个类的实例就可以很容易的被排序，查找，以及使用在基于比较的集合中。在comparaTo方法中实现对域的比较的时候，应该避免使用>和<操作符，相反，应该使用基本类型的封装类里的静态比较方法，或者是Comparator接口里的比较器构造方法。
+总结一下，当你要实现一个有明确顺序的值类的时候，都应该让这个类实现Comparable接口，如此以来，这个类的实例就可以很容易的被排序，查找，以及使用在基于比较的集合中。在comparaTo方法中实现对域的比较的时候，避免使用>和<操作符，应该使用基本类型的封装类里的静态比较方法或者Comparator接口里的比较器构造方法。
