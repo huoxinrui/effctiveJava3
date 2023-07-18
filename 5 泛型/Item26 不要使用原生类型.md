@@ -206,18 +206,38 @@ static int numElementsInCommon(Set s1, Set s2) {
      }
 ```
 
-> This method works but it uses raw types, which are dangerous. The safe alternative is to use *unbounded wildcard types*. If you want to use a generic type but you don’t know or care what the actual type parameter is, you can use a question mark instead. For example, the unbounded wildcard type for the generic type Set<E> is Set<?> (read “set of some type”). It is the most general parameterized Set type, capable of holding *any* set. Here is how the numElementsInCommon declaration looks with unbounded wildcard types:
+> This method works but it uses raw types, which are dangerous.
+> The safe alternative is to use *unbounded wildcard types*. 
+> If you want to use a generic type but you don’t know or care what the actual type parameter is, you can use a question mark instead. 
+> For example, the unbounded wildcard type for the generic type Set<E> is Set<?> (read “set of some type”).
+> It is the most general parameterized Set type, capable of holding *any* set.
+> Here is how the numElementsInCommon declaration looks with unbounded wildcard types:
 
-这个方法可以工作，但是使用了危险的原生类型。安全的替代方法是使用无限制通配符类型（unbounded wildcard types）。当你想使用泛型，却又不知道也不关系其真正的类型参数是什么的时候你就可以使用一个问号来代替。比如泛型Set<E>的无限制通配符类型就是Set<?>(读作，某个类型的集合)。这是一个最普通的参数化Set类型，可以持有任意的Set。下面是numElementsInCommon使用无限制通配符类型进行声明的代码：
+这个方法可以工作，但是使用了危险的原生类型。
+安全的替代方法是使用无限制通配符类型（unbounded wildcard types）。
+当你想使用泛型，却又不知道也不关系其真正的类型参数是什么的时候你就可以使用一个问号来代替。
+比如泛型Set<E>的无限制通配符类型就是Set<?>(读作，某个类型的集合)。
+这是一个最普通的参数化Set类型，可以持有任意的Set。
+下面是numElementsInCommon使用无限制通配符类型进行声明的代码：
 
 ```java
 // Uses unbounded wildcard type - typesafe and flexible 
 static int numElementsInCommon(Set<?> s1, Set<?> s2) { ... }
 ```
 
-> What is the difference between the unbounded wildcard type Set<?> and the raw type Set? Does the question mark really buy you anything? Not to belabor the point, but the wildcard type is safe and the raw type isn’t. You can put *any* element into a collection with a raw type, easily corrupting the collection’s type invariant (as demonstrated by the unsafeAdd method on page 119); **you can’t put any element (other than null) into a Collection< ？>**. Attempting to do so will generate a compile-time error message like this:
+> What is the difference between the unbounded wildcard type Set<?> and the raw type Set? 
+> Does the question mark really buy you anything? 
+> Not to belabor the point, but the wildcard type is safe and the raw type isn’t. 
+> You can put *any* element into a collection with a raw type, easily corrupting the collection’s type invariant (as demonstrated by the unsafeAdd method on page 119); 
+> **you can’t put any element (other than null) into a Collection< ？>**. 
+> Attempting to do so will generate a compile-time error message like this:
 
-那么，无限制通配符类型Set<?>和原生类型Set之间的区别是什么呢？这个问号确实能起到作用吗？通配符类型是安全的，但是原生类型却不是，这一点是毋庸置疑的。你可以往一个原生类型的集合里，添加任何一个元素，可以很容易打破集合的类型约束（就像前面的unsafeAdd方法所示范的那样）；**但是你却不能往一个Collection<？>里添加除了null以外的任何元素**。当你企图这么做的时候，就会在编译的时候，生成一个如下所示的错误信息：
+那么，无限制通配符类型Set<?>和原生类型Set之间的区别是什么呢？
+这个问号确实能起到作用吗？
+通配符类型是安全的，但是原生类型却不是，这一点是毋庸置疑的。
+你可以往一个原生类型的集合里，添加任何一个元素，可以很容易打破集合的类型约束（就像前面的unsafeAdd方法所示范的那样）；
+**但是你却不能往一个Collection<？>里添加除了null以外的任何元素**。
+当你企图这么做的时候，就会在编译的时候，生成一个如下所示的错误信息：
 
 ```java
 WildCard.java:13: error: incompatible types: String cannot be
@@ -228,17 +248,35 @@ WildCard.java:13: error: incompatible types: String cannot be
        CAP#1 extends Object from capture of ?
 ```
 
-> Admittedly this error message leaves something to be desired, but the compiler has done its job, preventing you from corrupting the collection’s type invariant, whatever its element type may be. Not only can’t you put any element (other than null) into a Collection<?>, but you can’t assume anything about the type of the objects that you get out. If these restrictions are unacceptable, you can use *generic methods* (Item 30) or *bounded wildcard types* (Item 31).
+> Admittedly this error message leaves something to be desired, but the compiler has done its job, preventing you from corrupting the collection’s type invariant, whatever its element type may be.
+> Not only can’t you put any element (other than null) into a Collection<?>, but you can’t assume anything about the type of the objects that you get out.
+> If these restrictions are unacceptable, you can use *generic methods* (Item 30) or *bounded wildcard types* (Item 31).
 
-虽然这个错误信息还缺少一些想看到的东西， 但是编译器已经完成了它的任务，阻止了我们破坏集合的类型约束，不论这个元素类型是什么。你不仅仅不能把任何元素（除了null）放到Collection<?>里去，还不能对从里面取出来的元素的类型做任何的假设。如果这些限制无法接受，你可以使用泛型方法（Item30）或者有限制通配符类型（Item31）。
+虽然这个错误信息还缺少一些想看到的东西， 但是编译器已经完成了它的任务，阻止了我们破坏集合的类型约束，不论这个元素类型是什么。
+你不仅仅不能把任何元素（除了null）放到Collection<?>里去，还不能对从里面取出来的元素的类型做任何的假设。
+如果这些限制无法接受，你可以使用泛型方法（Item30）或者有限制通配符类型（Item31）。
 
-> There are a few minor exceptions to the rule that you should not use raw types. **You must use raw types in class literals.** The specification does not permit the use of parameterized types (though it does permit array types and primitive types) [JLS, 15.8.2]. In other words, List.class, String[].class, and int.class are all legal, but List<String>.class and List<?>.class are not.
+> There are a few minor exceptions to the rule that you should not use raw types.
+> **You must use raw types in class literals.** 
+> The specification does not permit the use of parameterized types (though it does permit array types and primitive types) [JLS, 15.8.2]. 
+> In other words, List.class, String[].class, and int.class are all legal, but List<String>.class and List<?>.class are not.
 
-对于你不应该使用原生类型这一规则，有几种小小的例外情况。**在类字面量中，你必须使用原生类型**。规范不允许使用参数化类型（但是又允许使用数组类型和基本类型）[JLS, 15.8.2]。换句话说，List.class, String[].class, 和int.class都是合法的，但是 List<String>.class 和 List<?>.class却是不合法的。
+对于你不应该使用原生类型这一规则，有几种小小的例外情况。
+**在类字面量中，你必须使用原生类型**。
+规范不允许使用参数化类型（但是又允许使用数组类型和基本类型）[JLS, 15.8.2]。
+换句话说，List.class, String[].class, 和int.class都是合法的，但是 List<String>.class 和 List<?>.class却是不合法的。
 
-> A second exception to the rule concerns the instanceof operator. Because generic type information is erased at runtime, it is illegal to use the instanceof operator on parameterized types other than unbounded wildcard types. The use of unbounded wildcard types in place of raw types does not affect the behavior of the instanceof operator in any way. In this case, the angle brackets and question marks are just noise. **This is the preferred way to use the** **instanceof** **operator with generic types:**
+> A second exception to the rule concerns the instanceof operator.
+> Because generic type information is erased at runtime, it is illegal to use the instanceof operator on parameterized types other than unbounded wildcard types. 
+> The use of unbounded wildcard types in place of raw types does not affect the behavior of the instanceof operator in any way. 
+> In this case, the angle brackets and question marks are just noise.
+> **This is the preferred way to use the** **instanceof** **operator with generic types:**
 
-这个规则的第二个例外，是关于instanceof操作符的，因为在运行中，泛型类型信息是被擦除了，使用instanceof操作符在参数化类型上时非法的，无限制通配符类型除外。使用无限制通配符来代替原生类型不会对instanceof操作符的结果产生任何的影响，在这种情况下，<> 和 ? 就仅仅只是多余的了。下面是泛型使用instanceof操作符的首选的方法：
+这个规则的第二个例外，是关于instanceof操作符的。
+因为在运行中，泛型类型信息是被擦除了，使用instanceof操作符在参数化类型上时非法的，无限制通配符类型除外。
+使用无限制通配符来代替原生类型不会对instanceof操作符的结果产生任何的影响。
+在这种情况下，<> 和 ? 就仅仅只是多余的了。
+下面是泛型使用instanceof操作符的首选的方法：
 
 ```java
 // Legitimate use of raw type - instanceof operator 
@@ -248,15 +286,23 @@ if (o instanceof Set) { // Raw type
 }
 ```
 
-> Note that once you’ve determined that o is a Set, you must cast it to the wildcard type Set<?>, not the raw type Set. This is a checked cast, so it will not cause a compiler warning.
+> Note that once you’ve determined that o is a Set, you must cast it to the wildcard type Set<?>, not the raw type Set. 
+> This is a checked cast, so it will not cause a compiler warning.
 
-需要注意的是， 一旦你确定了o是一个Set，就必须将其转化为通配符类型Set<?>，而不是原生类型。这是一个受检的转化，这样就不会出现编译器警告了。
+需要注意的是， 一旦你确定了o是一个Set，就必须将其转化为通配符类型Set<?>，而不是原生类型。
+这是一个受检的转化，这样就不会出现编译器警告了。
 
-> In summary, using raw types can lead to exceptions at runtime, so don’t use them. They are provided only for compatibility and interoperability with legacy code that predates the introduction of generics. As a quick review, Set<Object> is a parameterized type representing a set that can contain objects of any type, Set<?> is a wildcard type representing a set that can contain only objects of some unknown type, and Set is a raw type, which opts out of the generic type system. The first two are safe, and the last is not.
+> In summary, using raw types can lead to exceptions at runtime, so don’t use them.
+> They are provided only for compatibility and interoperability with legacy code that predates the introduction of generics.
+> As a quick review, Set<Object> is a parameterized type representing a set that can contain objects of any type, Set<?> is a wildcard type representing a set that can contain only objects of some unknown type, and Set is a raw type, which opts out of the generic type system.
+> The first two are safe, and the last is not.
 >
 > For quick reference, the terms introduced in this item (and a few introduced later in this chapter) are summarized in the following table:
 
-总结一下，使用原生类型可能会在运行时出现异常，因此不要使用它们。它们只是用来保证泛型发布之前的代码的兼容性和互用性的。来做一个快速的回顾，Set<object>是一个参数化类型，表示这个set可以持有任意类型的对象；Set<?>是一个通配符类型，表示这个set只能包含某个未知类型的对象；Set是一个原生类型，不适于泛型类型系统的一部分。前两种是安全的，而后一种是不安全的。
+总结一下，使用原生类型可能会在运行时出现异常，因此不要使用它们。
+它们只是用来保证泛型发布之前的代码的兼容性和互用性的。
+来做一个快速的回顾，Set<object>是一个参数化类型，表示这个set可以持有任意类型的对象；Set<?>是一个通配符类型，表示这个set只能包含某个未知类型的对象；Set是一个原生类型，不适于泛型类型系统的一部分。
+前两种是安全的，而后一种是不安全的。
 
 为了便于参考，将本节中介绍的术语（还有一些在本章中后面会用到）总结如下表：
 
