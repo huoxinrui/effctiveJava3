@@ -1,12 +1,30 @@
 ### Item33 考虑类型安全的异构容器
 
-> Common uses of generics include collections, such as Set<E> and Map<K,V>, and single-element containers, such as ThreadLocal<T> and AtomicReference<T>. In all of these uses, it is the container that is parameterized. This limits you to a fixed number of type parameters per container. Normally that is exactly what you want. A Set has a single type parameter, representing its element type; a Map has two, representing its key and value types; and so forth.
+> Common uses of generics include collections, such as Set<E> and Map<K,V>, and single-element containers, such as ThreadLocal<T> and AtomicReference<T>. 
+> In all of these uses, it is the container that is parameterized. 
+> This limits you to a fixed number of type parameters per container. 
+> Normally that is exactly what you want.
+> A Set has a single type parameter, representing its element type; a Map has two, representing its key and value types; and so forth.
 
-泛型最常见的使用有集合（比如Set<E>和Map<K,V>）和单个元素容器（比如ThreadLocal<T> 和AtomicReference<T>）。在这些用法中，都是被参数化了的容器。限制了每个容器只能有固定数目的类型参数。一般来说，这正是你想要的。Set只有一个类型参数，表示其元素类型，Map有两个类型参数，表示其键和值的类型，等等。
+泛型最常见的使用有集合（比如Set<E>和Map<K,V>）和单个元素容器（比如ThreadLocal<T> 和AtomicReference<T>）。
+在这些用法中，都是被参数化了的容器。
+限制了每个容器只能有固定数目的类型参数。
+一般来说，这正是你想要的。
+Set只有一个类型参数，表示其元素类型，Map有两个类型参数，表示其键和值的类型，等等。
 
-> Sometimes, however, you need more flexibility. For example, a database row can have arbitrarily many columns, and it would be nice to be able to access all of them in a typesafe manner. Luckily, there is an easy way to achieve this effect. The idea is to parameterize the *key* instead of the *container*. Then present the parameterized key to the container to insert or retrieve a value. The generic type system is used to guarantee that the type of the value agrees with its key.
+> Sometimes, however, you need more flexibility. 
+> For example, a database row can have arbitrarily many columns, and it would be nice to be able to access all of them in a typesafe manner. 
+> Luckily, there is an easy way to achieve this effect. 
+> The idea is to parameterize the *key* instead of the *container*. 
+> Then present the parameterized key to the container to insert or retrieve a value. 
+> The generic type system is used to guarantee that the type of the value agrees with its key.
 
-但是有时候，你可能需要更多的灵活性。比如，数据库行有任意数量的列，如果这个列都可以类型安全的访问就太好了。幸运的是，有一种很简单的方法可以达到这个效果。这个方法就是用参数化键来替代参数化容器。然后将参数化的键交给容器，来插入或者获取值。泛型类型系统可以保证这个值的类型和它的键相符。
+但是有时候，你可能需要更多的灵活性。
+比如，数据库行有任意数量的列，如果这个列都可以类型安全的访问就太好了。
+幸运的是，有一种很简单的方法可以达到这个效果。
+这个方法就是用参数化键来替代参数化容器。
+然后将参数化的键交给容器，来插入或者获取值。
+泛型类型系统可以保证这个值的类型和它的键相符。
 
 > As a simple example of this approach, consider a Favorites class that allows its clients to store and retrieve a favorite instance of arbitrarily many types. The Class object for the type will play the part of the parameterized key. The reason this works is that class Class is generic. The type of a class literal is not simply Class, but Class<T>. For example, String.class is of type Class<String>, and Integer.class is of type Class<Integer>. When a class literal is passed among methods to communicate both compile-time and runtime type information, it is called a *type token* [Bracha04].
 
