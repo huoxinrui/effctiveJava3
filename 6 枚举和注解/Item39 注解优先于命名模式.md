@@ -1,12 +1,24 @@
 ### Item39 注解优先于命名模式
 
-> Historically, it was common to use *naming patterns* to indicate that some program elements demanded special treatment by a tool or framework. For example, prior to release 4, the JUnit testing framework required its users to designate test methods by beginning their names with the characters test [Beck04]. This technique works, but it has several big disadvantages. First, typographical errors result in silent failures. For example, suppose you accidentally named a test method tsetSafetyOverride instead of testSafetyOverride. JUnit 3 wouldn’t complain, but it wouldn’t execute the test either, leading to a false sense of security.
+> Historically, it was common to use *naming patterns* to indicate that some program elements demanded special treatment by a tool or framework.
+> For example, prior to release 4, the JUnit testing framework required its users to designate test methods by beginning their names with the characters test [Beck04]. 
+> This technique works, but it has several big disadvantages. 
+> First, typographical errors result in silent failures.
+> For example, suppose you accidentally named a test method tsetSafetyOverride instead of testSafetyOverride.
+> JUnit 3 wouldn’t complain, but it wouldn’t execute the test either, leading to a false sense of security.
 
-按照经验，一般会使用“命名模式”来表示一些程序元素，需要工具或者框架进行特殊处理。比如，在JUnit4版本发行之前，JUnit测试框架要求用户使用test开头来命名测试方法[Beck04]。这个方法虽然可以工作，但是存在几个很大的缺点。首先，书写错误可能会导致出错，但是又没有任何提示。比如，你不小心把一个测试方法命名成了tsetSafetyOverride，而不是testSafetyOverride。JUnit3 不会提示，也不会执行这个测试，会给人带来错误的安全感。
+按照经验，一般会使用“命名模式”来表示一些程序元素，需要工具或者框架进行特殊处理。
+比如，在JUnit4版本发行之前，JUnit测试框架指定用户使用test开头来命名测试方法[Beck04]。
+这个方法虽然可以工作，但是存在几个很大的缺点。
+首先，书写错误可能会导致出错，但是又没有任何提示。
+比如，你不小心把一个测试方法命名成了tsetSafetyOverride，而不是testSafetyOverride。
+JUnit3 不会提示，也不会执行这个测试，会给人带来错误的安全感。
 
-> A second disadvantage of naming patterns is that there is no way to ensure that they are used only on appropriate program elements. For example, suppose you called a class TestSafetyMechanisms in hopes that JUnit 3 would automatically test all of its methods, regardless of their names. Again, JUnit 3 wouldn’t complain, but it wouldn’t execute the tests either.
+> A second disadvantage of naming patterns is that there is no way to ensure that they are used only on appropriate program elements.
+> For example, suppose you called a class TestSafetyMechanisms in hopes that JUnit 3 would automatically test all of its methods, regardless of their names. Again, JUnit 3 wouldn’t complain, but it wouldn’t execute the tests either.
 
-命名模式的第二个缺点是没有办法保证它们只是应用于合适的程序元素上。比如，你把一个类命名为TestSafetyMechanisms，希望JUnit3可以自动的测试所有的方法，而忽略了方法的名字。同样地，JUnit3不会提示，也不会执行这些测试。
+命名模式的第二个缺点是没有办法保证它们只是应用于合适的程序元素上。
+比如，你把一个类命名为TestSafetyMechanisms，希望JUnit3可以自动的测试所有的方法，而忽略了方法的名字。同样地，JUnit3不会提示，也不会执行这些测试。
 
 > A third disadvantage of naming patterns is that they provide no good way to associate parameter values with program elements. For example, suppose you want to support a category of test that succeeds only if it throws a particular exception. The exception type is essentially a parameter of the test. You could encode the exception type name into the test method name using some elaborate naming pattern, but this would be ugly and fragile (Item 62). The compiler would have no way of knowing to check that the string that was supposed to name an exception actually did. If the named class didn’t exist or wasn’t an exception, you wouldn’t find out until you tried to run the test.
 
